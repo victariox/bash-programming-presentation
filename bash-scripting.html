@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>advanced bash scripting</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+        font-size: medium;
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+        font-size: medium;
+      }
+      .remark-code, .remark-inline-code {
+        font-family: 'Ubuntu Mono';
+        font-size: 25px;
+      }
+      .warn {
+        color: #fa0000;
+        font-weight: bold;
+        font-size: 25px;
+      }
+      .small {
+        font-size: 12px;
+      }
+      .med {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <textarea id="source">
+
+class: center, middle
+
+# advanced bash scripting
+
+.med[mustafa.cem.isik@huawei.com]
+---
+name: intro
+
+# introduction
+
+---
+template: intro
+
+```bash
+$
+```
+
+---
+template: intro
+
+```bash
+$ echo "Hello, world!"
+```
+
+--
+```bash
+Hello, world!
+```
+---
+name: variables
+
+# variables
+
+---
+template: variables
+
+```bash
+$ foo=bar
+```
+--
+```bash
+$ echo $foo
+```
+
+---
+template: variables
+
+```bash
+$ foo=bar
+```
+```bash
+$ echo ${foo}
+```
+--
+```bash
+bar
+```
+---
+template: variables
+
+```bash
+$ message="Hello"
+```
+--
+```bash
+$ echo ${message}
+```
+--
+```bash
+Hello
+```
+--
+```bash
+$ message+=", world!"
+```
+--
+```bash
+$ echo ${message}
+```
+--
+```bash
+Hello, world!
+```
+---
+template: variables
+
+```bash
+$ message="x      x"
+```
+--
+```bash
+$ echo ${message}
+```
+--
+```bash
+x x
+```
+--
+```bash
+$ echo "${message}"
+```
+--
+```bash
+x      x
+```
+---
+template: variables
+
+```bash
+$ string="abcdefg"
+```
+--
+```bash
+$ echo ${string:3}
+```
+--
+```bash
+defg
+```
+--
+```bash
+$ echo ${string:4:2}
+```
+--
+```bash
+ef
+```
+--
+```bash
+$ echo ${string: -1}
+```
+--
+```bash
+g
+```
+---
+name: quoting
+# quoting
+
+--
+```bash
+$ string="abcdefg"
+```
+--
+```bash
+$ echo "\$string"
+```
+--
+```bash
+$string
+```
+--
+```bash
+$ echo '$string'
+```
+--
+```bash
+$string
+```
+---
+template: quoting
+--
+```bash
+$ msg=$'Hello,\nWorld!'
+```
+--
+```bash
+$ echo "${msg}"
+```
+--
+```bash
+Hello,
+World!
+```
+--
+```bash
+$ echo $'\U1f60e'
+```
+--
+```bash
+😎
+```
+
+---
+name: special
+# special variables
+
+---
+template: special
+
+```bash
+$ echo ${USER}
+```
+--
+```bash
+cem
+```
+--
+```bash
+$ echo ${BASH_VERSION}
+```
+--
+```bash
+4.3.27(1)-release
+```
+--
+```bash
+$ echo $$
+```
+--
+```bash
+1568
+```
+---
+template: special
+
+```bash
+$ echo $?
+```
+--
+```bash
+0
+```
+--
+```bash
+$ false
+```
+--
+```bash
+$ echo $?
+```
+--
+```bash
+1
+```
+---
+template: special
+
+```bash
+$ echo $0
+```
+--
+```bash
+/bin/bash
+```
+--
+```bash
+$ echo $1
+```
+--
+```bash
+
+```
+---
+template: special
+
+```bash
+$ bash -c 'echo $1' foo bar baz
+```
+--
+```bash
+bar
+```
+--
+```bash
+$ bash -c 'echo $@' foo bar baz
+```
+--
+```bash
+bar baz
+```
+--
+```bash
+$ bash -c 'echo $0 $@' foo bar baz
+```
+--
+```bash
+foo bar baz
+```
+---
+template: special
+
+```bash
+$ bash -c 'echo $#' foo bar baz
+```
+--
+```bash
+2
+```
+---
+name: arrays
+# arrays
+
+---
+template: arrays
+```bash
+$ a=(abc def)
+```
+--
+```bash
+$ echo ${a}
+```
+--
+```bash
+abc
+```
+--
+```bash
+$ echo ${a[1]}
+```
+--
+```bash
+def
+```
+--
+```bash
+$ echo ${a[@]}
+```
+--
+```bash
+abc def
+```
+---
+template: arrays
+
+```bash
+$ a=(a b c)
+```
+--
+```bash
+$ a+=(d e f)
+```
+--
+```bash
+$ echo "${a[@]}"
+```
+--
+```bash
+a b c d e f
+```
+---
+template: arrays
+
+```bash
+$ a=(a b c)
+```
+```bash
+$ a+=d
+```
+--
+```bash
+$ echo "${a[@]}"
+```
+--
+```bash
+ad b c
+```
+--
+```bash
+$ a+=(d)
+```
+--
+```bash
+$ echo "${a[@]}"
+```
+--
+```bash
+$ ad b c d
+```
+---
+template: arrays
+
+```bash
+$ a=(a b c d e f g)
+```
+--
+```bash
+$ echo ${#a[@]}
+```
+--
+```bash
+7
+```
+--
+```bash
+$ echo ${a[@]:2}
+```
+--
+```bash
+c d e f g
+```
+--
+```bash
+$ echo ${a[@]:2:3}
+```
+--
+```bash
+c d e
+```
+---
+name: associative
+# associative arrays
+
+--
+```bash
+$ unset a
+```
+--
+```bash
+$ declare -A a
+```
+--
+```bash
+$ a=([name]=bob [age]=21)
+```
+--
+```bash
+$ echo ${a[name]}
+```
+--
+```bash
+bob
+```
+--
+```bash
+$ echo ${a[age]}
+```
+--
+```bash
+21
+```
+---
+template: associative
+
+```bash
+$ a[age]=23
+```
+--
+```bash
+$ a[email]=hede@hodo.com
+```
+--
+```bash
+$ echo ${a[email]}
+```
+--
+```bash
+hede@hodo.com
+```
+---
+name: integer
+# integer
+
+--
+```bash
+$ declare -i int
+```
+--
+```bash
+$ int=foo
+```
+--
+```bash
+$ echo ${int}
+```
+--
+```bash
+0
+```
+--
+```bash
+int=2+2
+```
+--
+```bash
+$ echo ${int}
+```
+--
+```bash
+4
+```
+---
+name: uppercase
+# uppercase
+
+--
+```bash
+$ declare -u upper
+```
+--
+```bash
+$ upper="Hello, World!"
+```
+--
+```bash
+$ echo ${upper}
+```
+--
+```bash
+HELLO, WORLD!
+```
+
+---
+name: functions
+# functions
+
+--
+```bash
+$ function greeter() { echo "Hello ${USER}!"; }
+```
+--
+```bash
+$ greeter
+```
+--
+```bash
+Hello Cem!
+```
+--
+```bash
+$ function greeter() { echo "Hello $1!"; }
+```
+--
+```bash
+$ greeter bob
+```
+--
+```bash
+Hello bob!
+```
+
+---
+template: functions
+
+--
+```bash
+$ function func() { return 0; }
+$ func; echo $?
+```
+--
+```bash
+0
+```
+---
+template: functions
+```bash
+$ function func() { return 1; }
+$ func; echo $?
+```
+--
+```bash
+1
+```
+---
+template: functions
+```bash
+$ function func() { return -1; }
+$ func; echo $?
+```
+--
+```bash
+255
+```
+---
+template: functions
+```bash
+$ function func() { return 256; }
+$ func; echo $?
+```
+--
+```bash
+0
+```
+---
+template: functions
+```bash
+$ function func() { return; }
+$ func; echo $?
+```
+--
+```bash
+0
+```
+---
+template: functions
+```bash
+$ function func() { false; return; }
+$ func; echo $?
+```
+--
+```bash
+1
+```
+---
+name: local
+# local variables
+
+--
+```bash
+$ foo=1
+```
+--
+```bash
+$ function f() {
+    foo=2
+}
+```
+--
+```bash
+$ f
+```
+--
+```bash
+$ echo ${foo}
+```
+--
+```bash
+2
+```
+---
+template: local
+
+```bash
+$ function f() {
+    echo before: ${foo}
+    local foo=3
+    echo after: ${foo}
+}
+```
+--
+```bash
+$ f
+```
+--
+```bash
+before: 2
+after: 3
+```
+--
+```bash
+$ echo ${foo}
+```
+--
+```bash
+2
+```
+---
+name: list
+# lists
+
+--
+```bash
+$ echo foo; echo bar
+```
+--
+```bash
+foo
+bar
+```
+--
+```bash
+$ true &amp;&amp; echo "it's true!"
+```
+--
+```bash
+it's true!
+```
+--
+```bash
+$ false &amp;&amp; echo "is it?" || echo "nope, that's false"
+```
+--
+```bash
+nope, that's false
+```
+---
+name: test
+# test
+
+--
+```bash
+$ test foo = foo; echo $?
+```
+--
+```bash
+0
+```
+--
+```bash
+$ test foo = foo &amp;&amp; echo true || echo false
+```
+--
+```bash
+true
+```
+--
+```bash
+$ test foo = bar &amp;&amp; echo true || echo false
+```
+--
+```bash
+false
+```
+---
+template: test
+
+```bash
+$ test foo = bar
+```
+--
+```bash
+$ [ foo = bar ]
+```
+--
+```bash
+$ [ foo = bar ] &amp;&amp; echo true || echo false
+```
+--
+```bash
+false
+```
+---
+template: test
+
+```bash
+[ ! <expression> ] # expression is false
+```
+--
+```bash
+[ <expr1> -a <expr2> ] # both are true
+```
+--
+```bash
+[ <expr1> -o <expr2> ] # either is true
+```
+--
+```bash
+[ -n <string> ] # string length is nonzero
+```
+--
+```bash
+[ -z <string> ] # string length is zero
+```
+--
+```bash
+[ <string1> = <string2> ] # strings are equal
+```
+--
+```bash
+[ <string1> != <string2> ] # strings are not equal
+```
+---
+template: test
+
+```bash
+[ <int1> -eq <int2> ] # integers are equal
+```
+--
+```bash
+[ <int1> -ne <int2> ] # integers are not equal
+```
+--
+```bash
+[ <int1> -lt <int2> ] # int1 is less than int2
+```
+--
+```bash
+[ <int1> -le <int2> ] # int1 is less or equal int2
+```
+--
+```bash
+[ <int1> -gt <int2> ] # int1 is greater than int2
+```
+--
+```bash
+[ <int1> -ge <int2> ] # int1 is greater or equal int2
+```
+---
+template: test
+
+```bash
+[ -e <file> ] # file exists
+```
+--
+```bash
+[ -f <file> ] # file exists and is a regular file
+```
+--
+```bash
+[ -L <file> ] # file exists and is a symbolic link
+```
+--
+```bash
+[ -d <file> ] # file exists and is a directory
+```
+--
+```bash
+[ -s <file> ] # file exists and has size greater than 0
+```
+--
+```bash
+[ -r <file> ] # file exists and is readable
+```
+--
+```bash
+[ -x <file> ] # file exists and is executable
+```
+---
+name: control-if
+# control structures: if/elif/else/fi
+
+--
+name: control-if-ex
+```bash
+$ function f() {
+    if [ $1 -lt 0 ]; then
+        echo "negative"
+    elif [ $1 -le 9 ]; then
+        echo "one digit"
+    elif [ $1 -le 99 ]; then
+        echo "two digits"
+    else
+        echo "large!"
+    fi
+}
+```
+--
+```bash
+$ f 5
+```
+--
+```bash
+one digit
+```
+---
+template: control-if-ex
+--
+```bash
+$ f -1
+```
+--
+```bash
+negative
+```
+---
+template: control-if-ex
+--
+```bash
+$ f 2134567890
+```
+--
+```bash
+large!
+```
+---
+name: control-while
+# control structures: while/do/done
+
+--
+```bash
+$ function f() {
+    local -i i=0
+    local args=($@)
+
+    while [ ${i} -lt $# ]; do
+        echo "${i}: ${args[${i}]}"
+        i=i+1
+    done
+}
+```
+--
+```bash
+$ f foo bar baz
+```
+--
+```bash
+0: foo
+1: bar
+2: baz
+```
+---
+name: control-case
+# control structures: case/in/esac
+
+--
+name: control-case-ex
+```bash
+$ function nth() {
+    case ${1: -1} in
+        1)     echo "${1}st" ;;
+        2)     echo "${1}nd" ;;
+        3)     echo "${1}rd" ;;
+        [4-9]) echo "${1}th" ;;
+        *)     echo "not a number" ;;
+    esac
+}
+```
+--
+```bash
+$ nth 3
+```
+--
+```bash
+3rd
+```
+---
+template: control-case-ex
+
+--
+```bash
+$ nth 105
+```
+--
+```bash
+105th
+```
+---
+template: control-case-ex
+
+--
+```bash
+$ nth foo
+```
+--
+```bash
+not a number
+```
+---
+name: control-for-do
+# control structures: for/do/done
+
+--
+```bash
+$ for((i=1; i&lt;=5; ++i)); do
+    echo ${i}
+done
+```
+--
+```bash
+1
+2
+3
+4
+5
+```
+---
+name: control-for-in
+# control structures: for/in/do/done
+
+--
+```bash
+$ for number in 1 2 3 4 5; do
+    echo ${number}
+done
+```
+--
+```bash
+1
+2
+3
+4
+5
+```
+---
+name: control-for-in-ex
+template: control-for-in
+
+```bash
+$ names=("Alice" "Bob jr." "Carol" "Dave")
+```
+--
+```bash
+$ for name in ${names[@]}; do # careful!
+    echo ${name}
+done
+```
+--
+```bash
+Alice
+Bob
+jr.
+Carol
+Dave
+```
+---
+template: control-for-in-ex
+
+```bash
+$ for name in "${names[@]}"; do
+    echo ${name}
+done
+```
+--
+```bash
+Alice
+Bob jr.
+Carol
+Dave
+```
+---
+name: command-subst
+# command substitution
+
+--
+```bash
+$ date +%s
+```
+--
+```bash
+1412160589
+```
+--
+```bash
+$ seconds=$(date +%s)
+```
+--
+```bash
+$ echo ${seconds}
+```
+--
+```bash
+1412160713
+```
+---
+name: sequence-expression
+# sequence expression
+
+--
+```bash
+$ echo {1..10}
+```
+--
+```bash
+1 2 3 4 5 6 7 8 9 10
+```
+--
+```bash
+$ echo {0..100..7}
+```
+--
+```bash
+0 7 14 21 28 35 42 49 56 63 70 77 84 91 98
+```
+--
+```bash
+$ echo {00..999}
+```
+--
+```bash
+000 001 002 003 004 005 006 007
+008 009 010 011 012 013 014 015
+[...]
+992 993 994 995 996 997 998 999
+
+```
+---
+name: brace-expansion
+# brace expansion
+
+--
+```bash
+$ echo {bgf,mrfc,mrfp}_appl
+```
+--
+```bash
+bgf_appl mrfc_appl mrfp_appl
+```
+--
+```bash
+$ echo {bgf,mrf{c,p}}_appl
+```
+--
+```bash
+bgf_appl mrfc_appl mrfp_appl
+```
+---
+template: brace-expansion
+
+```bash
+$ cp source.cpp{,.bak}
+```
+--
+name: brace-expansion-ex
+```bash
+$ mkdir -p /mnt/really/long/path/with/typo/is/annoiing
+```
+--
+```bash
+$ mv /mnt/really/long/path/with/typo/is/annoiing \
+     /mnt/really/long/path/with/typo/is/annoying
+```
+--
+```bash
+$ cd /mnt/really/long/path/with/typo/is
+$ mv annoiing annoying
+$ cd ~
+```
+--
+```bash
+$ (cd /mnt/really/long/path/with/typo/is; \
+   mv annoiing annoying)
+```
+---
+template: brace-expansion-ex
+
+```bash
+$ mv /mnt/really/long/path/with/typo/is/anno{i,y}ing
+```
+---
+name: arithmetic-expansion
+# arithmetic expansion
+
+--
+```bash
+$ echo $(( 1 + 1 ))
+```
+```bash
+2
+```
+--
+```bash
+$ echo $[ 1 + 1 ] # deprecated!
+```
+```bash
+2
+```
+---
+template: arithmetic-expansion
+--
+```bash
+$ i=5
+$ echo $(( $i * $i ))
+```
+```bash
+25
+```
+--
+```bash
+$ echo $(( i * i ))
+```
+```bash
+25
+```
+---
+template: arithmetic-expansion
+--
+```bash
+$ echo $(( 2**32 - 1 ))
+```
+```bash
+4294967295
+```
+--
+```bash
+$ echo $(( 2**64 ))
+```
+```bash
+0
+```
+---
+template: arithmetic-expansion
+--
+```bash
+$ echo $(( foo ))
+```
+```bash
+0
+```
+--
+```bash
+$ echo $?
+```
+```bash
+0
+```
+---
+template: arithmetic-expansion
+--
+```bash
+$ echo $(( 0100 ))
+```
+```bash
+64
+```
+--
+```bash
+$ echo $(( 0xDEADBEEF ))
+```
+```bash
+3735928559
+```
+--
+```bash
+$ echo $(( 2#1010101010 ))
+```
+```bash
+682
+```
+---
+name: let
+# let
+
+--
+```bash
+$ i=12
+```
+```bash
+$ let i=i+i
+```
+--
+```bash
+$ echo $i
+```
+```bash
+24
+```
+--
+```bash
+$ let i=i/3
+```
+```bash
+8
+```
+---
+name: regex
+# regular expressions
+
+--
+```bash
+$ [[ "bar" =~ ^ba ]]
+```
+--
+```bash
+$ for s in foo bar baz; do
+    if [[ "${s}" =~ ^ba ]]; then
+        echo match: ${s}
+    fi
+done
+```
+--
+```bash
+match: bar
+match: baz
+```
+---
+template: regex
+--
+```bash
+$ regex="^x x"
+```
+--
+```bash
+$ for s in "xxx" "x x" "x xyz"; do
+    if [[ "${s}" =~ $regex ]]; then
+        echo match: ${s}
+    fi
+done
+```
+--
+```bash
+match: x x
+match: x xyz
+```
+---
+template: regex
+--
+```bash
+$ regex="^(.*):([0-9]+)"
+```
+--
+```bash
+$ while read s; do
+    if [[ "${s}" =~ $regex ]]; then
+        echo -n "file: ${BASH_REMATCH[1]}"
+        echo   " line: ${BASH_REMATCH[2]}"
+    fi
+done &lt;&lt;EOF
+source.cc:23
+header.hh:45
+EOF
+```
+--
+```bash
+file: source.cc line: 23
+file: header.hh line: 45
+```
+---
+name: io
+# I/O redirection
+
+--
+```bash
+$ echo foo &gt; file.txt
+```
+--
+```bash
+$ cat file.txt
+```
+--
+```bash
+foo
+```
+--
+```bash
+$ echo bar &gt; file.txt
+```
+--
+```bash
+$ cat file.txt
+```
+--
+```bash
+bar
+```
+---
+template: io
+
+```bash
+$ echo foo &gt; file.txt
+```
+--
+```bash
+$ echo bar &gt;&gt; file.txt
+```
+--
+```bash
+$ cat file.txt
+```
+--
+```bash
+foo
+bar
+```
+---
+template: io
+```bash
+$ function log() { echo &gt;&amp;2 "$@"; }
+```
+--
+```bash
+$ log "This is an error message!"
+```
+--
+name: io-ex
+```bash
+This is an error message!
+```
+--
+```bash
+$ log "error" &gt; error.log
+```
+--
+```bash
+error
+```
+--
+```bash
+$ [ -s error.log ] || echo empty
+```
+--
+```bash
+empty
+```
+---
+template: io-ex
+```bash
+$ log "error" 2&gt; error.log
+```
+--
+```bash
+$ cat error.log
+```
+--
+```bash
+error
+```
+---
+template: io
+```bash
+$ strace ls
+```
+--
+```bash
+execve("/usr/bin/ls", ["ls"], [/* 70 vars */]) = 0
+brk(0)                                  = 0xd04000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[...]
+```
+--
+```bash
+$ strace ls | grep TIOCGWINSZ
+```
+--
+```bash
+execve("/usr/bin/ls", ["ls"], [/* 70 vars */]) = 0
+brk(0)                                  = 0xd04000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[...]
+```
+---
+template: io
+```bash
+$ strace ls 2&gt;&amp;1 | grep TIOCGWINSZ
+```
+--
+```bash
+ioctl(1, TIOCGWINSZ, 0x7fffb02fa7a0)    = -1 ENOTTY
+```
+--
+```bash
+$ strace ls |&amp; grep TIOCGWINSZ
+```
+--
+```bash
+ioctl(1, TIOCGWINSZ, 0x7fffb02fa7a0)    = -1 ENOTTY
+```
+---
+template: io
+```bash
+$ cut -d: -f1 &lt; /etc/passwd
+```
+--
+```bash
+root
+bin
+daemon
+mail
+[...]
+```
+---
+name: here-strings
+# here-strings
+```bash
+$ input="foo:bar:baz"
+```
+--
+```bash
+$ echo "${input}" | cut -d: -f2
+bar
+```
+--
+```bash
+$ cut -d: -f2 &lt;&lt;&lt;"${input}"
+bar
+```
+---
+name: here-documents
+# here-documents
+
+--
+```bash
+$ apply_config --help
+Usage: apply_config &lt;config file&gt;
+```
+--
+```bash
+$ echo "var1=foo" &gt; config.txt
+$ echo "var2=bar" &gt;&gt; config.txt
+$ echo "var3=baz" &gt;&gt; config.txt
+$ apply_config config.txt
+```
+--
+```bash
+$ (
+    echo "var1=foo"
+    echo "var2=bar"
+    echo "var3=baz"
+  ) | apply_config -
+```
+---
+template: here-documents
+```bash
+$ apply_config - &lt;&lt;EOF
+var1=foo
+var2=bar
+var3=baz
+EOF
+```
+---
+name: exec
+# exec
+
+--
+```bash
+$ bash -c 'id -un; echo foo'
+```
+--
+```bash
+cem
+foo
+```
+--
+```bash
+$ bash -c 'exec id -un; echo foo'
+```
+--
+```bash
+cem
+```
+---
+template: exec
+```bash
+bash -c 'echo $$; readlink /proc/self'
+```
+--
+```bash
+11726
+11727
+```
+--
+```bash
+bash -c 'echo $$; exec readlink /proc/self'
+```
+--
+```bash
+11728
+11728
+```
+---
+name: exec-redir
+# exec (redirection)
+
+--
+```bash
+$ exec {FD}&gt; file.txt
+```
+--
+```bash
+$ echo ${FD}
+```
+--
+```bash
+10
+```
+--
+```bash
+$ echo &gt;&amp;${FD} foobar
+```
+--
+```bash
+$ cat file.txt
+```
+--
+```bash
+foobar
+```
+--
+```bash
+$ exec ${FD}&gt;&amp;-
+```
+---
+template: exec-redir
+--
+```bash
+$ exec 666&gt; file.txt
+```
+--
+```bash
+$ ls -l /dev/fd/666
+```
+--
+```bash
+/dev/fd/666 -&gt; /home/cem/file.txt
+```
+--
+```bash
+$ echo &gt;&amp;666 foobar
+```
+--
+```bash
+$ cat file.txt
+```
+--
+```bash
+foobar
+```
+--
+```bash
+$ exec 666&gt;&amp;-
+```
+---
+# useless use of cat
+
+--
+```bash
+$ cat /etc/passwd | grep ${USER}
+```
+--
+```bash
+$ grep ${USER} &lt; /etc/passwd
+```
+--
+```bash
+$ grep ${USER} /etc/passwd
+```
+---
+name: proc-subst
+# process substitution
+
+--
+```bash
+$ cat &lt;(echo foo)
+```
+--
+```bash
+foo
+```
+--
+```bash
+$ echo &lt;(echo foo)
+```
+--
+```bash
+/dev/fd/63
+```
+---
+template: proc-subst
+```bash
+$ ssh esekilx5160 rpm -qa | sort &gt; 5160.pkgs
+```
+--
+```bash
+$ ssh esekilx5163 rpm -qa | sort &gt; 5163.pkgs
+```
+--
+```bash
+$ diff -u 516{0,3}.pkgs
+```
+--
+```bash
+$ rm 516{0,3}.pkgs
+```
+---
+template: proc-subst
+```bash
+$ diff -u &lt;(ssh esekilx5160 rpm -qa | sort) \
+          &lt;(ssh esekilx5163 rpm -qa | sort)
+```
+--
+```bash
+--- /dev/fd/63  2014-10-02 09:36:27.445762659 +0300
++++ /dev/fd/62  2014-10-02 09:36:27.445762659 +0300
+@@ -573,7 +573,11 @@
+ gnome-pilot-2.0.16-3.44.68
+ gnome-pilot-devel-2.0.16-3.44.68
+ gnome-pilot-lang-2.0.16-3.44.68
++gnome-power-manager-2.24.1-17.67.1
++gnome-power-manager-lang-2.24.1-17.67.1
+ gnome-print-sharp-2.26.0-2.2.7
++gnome-screensaver-2.28.3-0.32.1
+[...]
+```
+---
+# job control
+
+--
+```bash
+$ (sleep $[20*60]; echo "wake up!")
+```
+--
+```bash
+wake up!
+```
+--
+```bash
+$ (sleep $[20*60]; echo "wake up!") &amp;
+```
+--
+```bash
+[1] 12019
+```
+--
+```bash
+$ kill %1
+```
+--
+```bash
+[1]+  Terminated    ( sleep $[20*60]; echo "wake up!" )
+```
+---
+name: trap
+# trap
+
+--
+```bash
+$ bash -c 'trap "echo Ctrl-C pressed!" TERM; sleep 60'
+```
+--
+```bash
+^C
+```
+--
+```bash
+Ctrl-C pressed!
+```
+--
+```bash
+$ bash -c 'trap "echo exiting..." EXIT; sleep 60' &amp;
+```
+--
+```bash
+[1] 12164
+```
+--
+```bash
+$ kill %1
+```
+--
+```bash
+exiting...
+```
+---
+name: getopts
+# getopts
+
+--
+- builtin
+
+--
+- simple syntax
+
+--
+- no long options
+
+--
+- argument order matters
+
+--
+.warn[discouraged, use getopt instead!]
+
+---
+name: getopt
+# getopt
+
+--
+```bash
+OPT=$(
+    getopt \
+        --options hv: \
+        --long help \
+        --long value: \
+        --name "$0" \
+        -- "$@"
+)
+
+if [ $? -ne 0 ]; then
+    usage
+    exit 1
+fi
+```
+---
+template: getopt
+
+```bash
+eval set -- "${OPT}"
+
+while true; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -v|--value)
+            value=$2
+            shift 2
+            ;;
+    esac
+done
+```
+---
+name: eval
+# eval
+
+--
+```bash
+$ var1=foo
+```
+--
+```bash
+$ var2=bar
+```
+--
+name: eval-ex
+```bash
+$ declare -i i=1
+```
+--
+```bash
+$ echo ${var${i}}
+```
+--
+```bash
+bash: ${var${i}}: bad substitution
+```
+---
+template: eval-ex
+--
+```bash
+$ eval "echo \${var${i}}"
+```
+--
+```bash
+foo
+```
+---
+template: eval-ex
+```bash
+$ i=i+1
+```
+--
+```bash
+$ eval "echo \${var${i}}"
+```
+--
+```bash
+bar
+```
+---
+name: good-habits
+# good habits
+
+--
+```bash
+#!/bin/bash
+```
+--
+```bash
+$ bash -c "false"; echo $?
+```
+--
+```bash
+1
+```
+--
+```bash
+$ bash -c "false; echo done"; echo $?
+```
+--
+```bash
+done
+0
+```
+---
+template: good-habits
+```bash
+#!/bin/bash
+set -e
+```
+--
+```bash
+$ bash -c "set -e; false; echo done"; echo $?
+```
+--
+```bash
+1
+```
+---
+template: good-habits
+```bash
+#!/bin/bash
+set -e
+```
+--
+```bash
+$ bash -c 'message="foo"; echo msg=${mesage}'
+```
+--
+```bash
+msg=
+```
+---
+template: good-habits
+```bash
+#!/bin/bash
+set -e
+set -u
+```
+--
+```bash
+$ bash -c 'set -u; message="foo"; echo msg=${mesage}'
+```
+--
+```bash
+bash: mesage: unbound variable
+```
+---
+name: pitfalls
+# pitfalls
+
+--
+```bash
+$ cat file
+```
+```bash
+foo
+bar
+```
+--
+name: pitfalls-ex
+```bash
+$ x="start"
+```
+--
+```bash
+$ cat file | while read i; do x+=",$i"; done; echo $x
+```
+--
+```bash
+start
+```
+---
+template: pitfalls-ex
+--
+```bash
+$ while read i; do x+=",$i"; done &lt; file; echo $x
+```
+--
+```bash
+start,foo,bar
+```
+
+---
+template: pitfalls
+name: pitfalls-ex2
+--
+```bash
+$ set -e
+$ func() {
+    local var=$(false)
+    echo "done"
+}
+```
+--
+```bash
+$ func
+```
+--
+```bash
+done
+```
+---
+template: pitfalls-ex2
+```bash
+$ set -e
+$ func() {
+    local var=$(false)
+    echo "done"
+}
+```
+---
+template: pitfalls-ex2
+
+```bash
+$ set -e
+$ func() {
+    local var
+    var=$(false)
+    echo "done"
+}
+```
+--
+```bash
+$ func
+```
+--
+```bash
+(shell exits with code 1)
+```
+---
+template: pitfalls
+--
+name: pitfalls-ex3
+```bash
+$ i=0
+$ let i++; echo $?
+```
+--
+```bash
+1
+```
+--
+```bash
+$ echo $i
+```
+```bash
+1
+```
+--
+```bash
+$ let i++; echo $?
+```
+--
+```bash
+0
+```
+---
+template: pitfalls-ex3
+---
+template: pitfalls
+```bash
+$ i=0
+$ i=$((i + 1)); echo $?
+```
+--
+```bash
+0
+```
+--
+```bash
+$ echo $i
+```
+```bash
+1
+```
+---
+# coding style
+```bash
+google-styleguide.googlecode.com/svn/trunk/shell.xml
+```
+---
+name: shellcheck
+# shellcheck
+
+--
+```bash
+https://github.com/koalaman/shellcheck
+```
+--
+```bash
+$ shellcheck /usr/bin/gettext.sh
+```
+--
+```bash
+In /usr/bin/gettext.sh line 20:
+if test "X&#96;(echo '\t') 2&gt;/dev/null" = 'X\t'; then
+          ^-- SC2006: Use $(..) instead of &#96;..
+                 ^-- SC2028: echo won't expand escape
+                             sequences. Consider printf.
+```
+---
+
+
+
+
+class: center, middle
+
+# the end   :(
+
+---
+class: center, middle
+
+# questions?
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
